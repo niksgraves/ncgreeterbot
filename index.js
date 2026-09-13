@@ -3,57 +3,66 @@ require("dotenv").config();
 const { App } = require("@slack/bolt");
 
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  appToken: process.env.SLACK_APP_TOKEN,
-  socketMode: true
+	token: process.env.SLACK_BOT_TOKEN,
+	appToken: process.env.SLACK_APP_TOKEN,
+	socketMode: true
 });
 
 app.command("/ncgreeterbot-help", async ({ ack, respond }) => {
-  await ack();
-  await respond({
-    text:
-`Available Commands:
+	await ack();
+	await respond({
+		text:
+			`Available Commands:
 /ncgreeterbot-ping - Check bot latency
 /ncgreeterbot-catfact - Get a cat fact
 /ncgreeterbot-joke - Laugh`
-  });
+	});
 });
 
 app.command("/ncgreeterbot-ping", async ({ command, ack, respond }) => {
-  const start = Date.now();
-  await ack();
-  const latency = Date.now() - start;
-  await respond({ text: `Pong!\nLatency: ${latency}ms` });
+	const start = Date.now();
+	await ack();
+	const latency = Date.now() - start;
+	await respond({ text: `Pong!\nLatency: ${latency}ms` });
 });
 
 app.command("/ncgreeterbot-catfact", async ({ ack, respond }) => {
-  await ack();
+	await ack();
 
-  try {
-    const response = await axios.get("https://catfact.ninja/fact");
-    await respond({ text: `Cat Fact:\n${response.data.fact}` });
-  } catch (err) {
-    await respond({ text: "Failed to fetch a cat fact." });
-  }
+	try {
+		const response = await axios.get("https://catfact.ninja/fact");
+		await respond({ text: `Cat Fact:\n${response.data.fact}` });
+	} catch (err) {
+		await respond({ text: "Failed to fetch a cat fact." });
+	}
 });
 
 app.command("/ncgreeterbot-joke", async ({ ack, respond }) => {
-  await ack();
+	await ack();
 
-  try {
-    const response = await axios.get("https://official-joke-api.appspot.com/random_joke");
-    await respond({
-      text:
-`${response.data.setup}
+	try {
+		const response = await axios.get("https://official-joke-api.appspot.com/random_joke");
+		await respond({
+			text:
+				`${response.data.setup}
 
 ${response.data.punchline}`
-    });
-  } catch (err) {
-    await respond({ text: "Failed to fetch a joke." });
-  }
+		});
+	} catch (err) {
+		await respond({ text: "Failed to fetch a joke." });
+	}
 });
 
-(async () => {
-  await app.start();
-  console.log("bot is running!");
-})();
+app.command("/ncgreeterbot-status", async ({ ack, respond }) => {
+	try {
+		await ack();
+		await respond({ text: `Bot is fully functional! Heyo!` });
+	} catch {
+		await respond({ text: `Bot is maybe not so functional? aww` });
+	}
+})
+
+	(async () => {
+		await app.start();
+		console.log("bot is running!");
+	})();
