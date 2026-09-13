@@ -15,7 +15,7 @@ app.command("/ncgreeterbot-help", async ({ ack, respond }) => {
 			`Available Commands:
 /ncgreeterbot-ping - Check bot latency
 /ncgreeterbot-catfact - Get a cat fact
-/ncgreeterbot-joke - Laugh`
+/ncgreeterbot-joke - Get a funny joke`
 	});
 });
 
